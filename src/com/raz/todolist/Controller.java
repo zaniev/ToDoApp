@@ -8,9 +8,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
 import javafx.util.Callback;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
@@ -59,6 +61,16 @@ public class Controller {
                     @Override
                     protected void updateItem(ToDoItem item, boolean empty) {
                         super.updateItem(item, empty);
+                        if(empty){
+                            setText(null);
+                        }else{
+                            setText(item.getShortDescription());
+                            if(item.getDueDate().isBefore(LocalDate.now().plusDays(1))){
+                                setTextFill(Color.RED);
+                            }else if(item.getDueDate().equals(LocalDate.now().plusDays(1))){
+                                setTextFill(Color.BROWN);
+                            }
+                        }
                     }
                 };
                 return cell;
