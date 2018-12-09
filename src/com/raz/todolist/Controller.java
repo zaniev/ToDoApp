@@ -4,6 +4,8 @@ import com.raz.todolist.datamodel.ToDoItem;
 import com.raz.todolist.datamodel.TodoData;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
@@ -29,7 +31,19 @@ public class Controller {
     @FXML
     private BorderPane mainborderpane;
     @FXML
+    private ContextMenu listContextMenu;
+
     public void initialize() {
+        listContextMenu = new ContextMenu();
+        MenuItem deleteMenuItem = new MenuItem("Delete");
+        deleteMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                ToDoItem item= ToDoListView.getSelectionModel().getSelectedItem();
+                deleteItem(item);
+            }
+        });
+        listContextMenu.getItems().addAll(deleteMenuItem);
 //        ToDoItem item1 = new ToDoItem("Do Shopping", "Get all necessary groceries for the next 2 weeks, ", LocalDate.of(2018, Month.DECEMBER, 13));
 //        ToDoItem item2 = new ToDoItem("Christmas List", "Buy presents for the whole family, also for Girlfriend and her Parents", LocalDate.of(2018, Month.DECEMBER, 24));
 //        ToDoItem item3 = new ToDoItem("Get a job in Programming", "Work hard, do a few private projects and land the dreamjob in programming", LocalDate.of(2019, Month.MARCH, 1));
@@ -73,6 +87,13 @@ public class Controller {
                         }
                     }
                 };
+                cell.emptyProperty().addListener((obs, wasEmpty, isNowEmpty) -> {
+                            if (isNowEmpty){
+                                cell.setContextMenu(null);
+                            }else{
+                                cell.setContextMenu(listContextMenu);
+                            }
+                });
                 return cell;
             }
         });
@@ -115,6 +136,17 @@ public class Controller {
             ToDoItem toDoItem  = controller.processResults();
 //            ToDoListView.getItems().setAll(TodoData.getInstance().getTodoItems());
             ToDoListView.getSelectionModel().select(toDoItem);
+        }
+    }
+
+    public void deleteItem(ToDoItem item){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete Todo Item");
+        alert.setHeaderText("Delete Item: " + item.getShortDescription());
+        alert.setContentText("Are you certain? Press Ok to confirm, or cancel to return");
+        Optional<ButtonType> result = alert.showAndWait();
+        if(result.isPresent() && result.get() == ButtonType.OK){
+            TodoData.getInstance().deleteTodoItem(item);
         }
     }
 
