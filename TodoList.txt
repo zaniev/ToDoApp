@@ -1,0 +1,5 @@
+Do Shopping	Get all necessary groceries for the next 2 weeks, 	December 13, 2018
+Christmas List	Buy presents for the whole family, also for Girlfriend and her Parents	December 24, 2018
+Get a job in Programming	Work hard, do a few private projects and land the dreamjob in programming	March 01, 2019
+test	for testing purposes	December 01, 2018
+1	just one try	December 01, 2018
