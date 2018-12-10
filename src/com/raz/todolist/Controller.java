@@ -9,10 +9,12 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.util.Callback;
 
+import javafx.scene.input.KeyEvent;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -94,11 +96,22 @@ public class Controller {
                                 cell.setContextMenu(listContextMenu);
                             }
                 });
+
                 return cell;
             }
         });
 
     }
+    @FXML
+    public void handleKeyPressed(KeyEvent keyEvent){
+        ToDoItem selectedItem = ToDoListView.getSelectionModel().getSelectedItem();
+        if(selectedItem != null){
+            if(keyEvent.getCode().equals(KeyCode.DELETE)){
+                deleteItem(selectedItem);
+            }
+        }
+    }
+
     @FXML
     public void handleClickListView(){
         ToDoItem item = ToDoListView.getSelectionModel().getSelectedItem();
